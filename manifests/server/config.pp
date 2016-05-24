@@ -27,6 +27,8 @@ define rsnapshot::server::config (
   $backup_time_dom = $rsnapshot::params::backup_time_dom,
   $cmd_preexec = $rsnapshot::params::cmd_preexec,
   $cmd_postexec = $rsnapshot::params::cmd_postexec,
+  $cmd_rsnapshot = $rsnapshot::server::cmd_rsnapshot,
+  $cmd_ssh = $rsnapshot::server::cmd_ssh,
   $retain_hourly = $rsnapshot::params::retain_hourly,
   $retain_daily = $rsnapshot::params::retain_daily,
   $retain_weekly = $rsnapshot::params::retain_weekly,
@@ -41,6 +43,17 @@ define rsnapshot::server::config (
   $wrapper_sudo = $rsnapshot::params::wrapper_sudo,
   $wrapper_rsync_sender = $rsnapshot::params::wrapper_rsync_sender,
   $wrapper_rsync_ssh = $rsnapshot::params::wrapper_rsync_ssh,
+  $cmd_cp = $rsnapshot::server::cmd_cp,
+  $cmd_rm = $rsnapshot::server::cmd_rm,
+  $cmd_rsync = $rsnapshot::server::cmd_rsync,
+  $cmd_ssh = $rsnapshot::server::cmd_ssh,
+  $cmd_logger = $rsnapshot::server::cmd_logger,
+  $cmd_du = $rsnapshot::server::cmd_du,
+  $cmd_rsnapshot_diff = $rsnapshot::server::cmd_rsnapshot_diff,
+  $linux_lvm_cmd_lvcreate = $rsnapshot::server::linux_lvm_cmd_lvcreate,
+  $linux_lvm_cmd_lvremove = $rsnapshot::server::linux_lvm_cmd_lvremove,
+  $linux_lvm_cmd_mount = $rsnapshot::server::linux_lvm_cmd_mount,
+  $linux_lvm_cmd_umount = $rsnapshot::server::linux_lvm_cmd_umount,
   ) {
 
   # Remove trailing slashes.
@@ -117,17 +130,17 @@ define rsnapshot::server::config (
   }
 
   $programs = {
-    cmd_cp => $rsnapshot::server::cmd_cp,
-    cmd_rm => $rsnapshot::server::cmd_rm,
-    cmd_rsync => $rsnapshot::server::cmd_rsync,
-    cmd_ssh => $rsnapshot::server::cmd_ssh,
-    cmd_logger => $rsnapshot::server::cmd_logger,
-    cmd_du => $rsnapshot::server::cmd_du,
-    cmd_rsnapshot_diff => $rsnapshot::server::cmd_rsnapshot_diff,
-    linux_lvm_cmd_lvcreate => $rsnapshot::server::linux_lvm_cmd_lvcreate,
-    linux_lvm_cmd_lvremove => $rsnapshot::server::linux_lvm_cmd_lvremove,
-    linux_lvm_cmd_mount => $rsnapshot::server::linux_lvm_cmd_mount,
-    linux_lvm_cmd_umount => $rsnapshot::server::linux_lvm_cmd_umount,
+    cmd_cp => $cmd_cp,
+    cmd_rm => $cmd_rm,
+    cmd_rsync => $cmd_rsync,
+    cmd_ssh => $cmd_ssh,
+    cmd_logger => $cmd_logger,
+    cmd_du => $cmd_du,
+    cmd_rsnapshot_diff => $cmd_rsnapshot_diff,
+    linux_lvm_cmd_lvcreate => $linux_lvm_cmd_lvcreate,
+    linux_lvm_cmd_lvremove => $linux_lvm_cmd_lvremove,
+    linux_lvm_cmd_mount => $linux_lvm_cmd_mount,
+    linux_lvm_cmd_umount => $linux_lvm_cmd_umount,
   }
 
   $options = {

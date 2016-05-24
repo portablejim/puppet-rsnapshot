@@ -49,6 +49,7 @@ define rsnapshot::server::config (
   $cmd_ssh = $rsnapshot::server::cmd_ssh,
   $cmd_logger = $rsnapshot::server::cmd_logger,
   $cmd_du = $rsnapshot::server::cmd_du,
+  $cmd_rsnapshot = $rsnapshot::server::cmd_rsnapshot,
   $cmd_rsnapshot_diff = $rsnapshot::server::cmd_rsnapshot_diff,
   $linux_lvm_cmd_lvcreate = $rsnapshot::server::linux_lvm_cmd_lvcreate,
   $linux_lvm_cmd_lvremove = $rsnapshot::server::linux_lvm_cmd_lvremove,

@@ -151,6 +151,7 @@ define rsnapshot::server::config (
     if($retain_monthly > 0) {
       Cron["rsnapshot-${name}-weekly"] -> Cron["rsnapshot-${name}-monthly"]
     }
+  }
 
   ## monthly
   cron { "rsnapshot-${name}-monthly" :

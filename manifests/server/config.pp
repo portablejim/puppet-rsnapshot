@@ -104,13 +104,42 @@ define rsnapshot::server::config (
     File[$log_file] -> Cron["rsnapshot-${name}-monthly"]
   }
 
+  if($sync_first) {
+      $cron_prepend = "${cmd_rsnapshot} -c ${config_file} sync &&"
+  }
+  else {
+      $cron_prepend = ""
+  }
+
+  if($retain_hourly > 0) {
+      $cron_hourly_prepend = "$cron_prepend"
+      $cron_daily_prepend = ""
+      $cron_weekly_prepend = ""
+      $cron_monthly_prepend = ""
+  } elsif($retain_daily > 0) {
+      $cron_hourly_prepend = ""
+      $cron_daily_prepend = "$cron_prepend"
+      $cron_weekly_prepend = ""
+      $cron_monthly_prepend = ""
+  } elsif($retain_weekly > 0) {
+      $cron_hourly_prepend = ""
+      $cron_daily_prepend = ""
+      $cron_weekly_prepend = "$cron_prepend"
+      $cron_monthly_prepend = ""
+  } elsif($retain_monthly > 0) {
+      $cron_hourly_prepend = ""
+      $cron_daily_prepend = ""
+      $cron_weekly_prepend = ""
+      $cron_monthly_prepend = "$cron_prepend"
+  }
+
   # cronjobs
 
   ## hourly
   if($retain_hourly > 0) {
     notify { "rsnapshot ${name} hourly: $retain_hourly": }
     cron { "rsnapshot-${name}-hourly" :
-      command => "${cmd_rsnapshot} -c ${config_file} hourly",
+      command => "${cron_hourly_prepend}${cmd_rsnapshot} -c ${config_file} hourly",
       user    => $server_user,
       hour    => $backup_hourly_cron,
       minute  => $backup_time_minute
@@ -127,7 +156,7 @@ define rsnapshot::server::config (
   ## daily
   if($retain_daily > 0) {
     cron { "rsnapshot-${name}-daily" :
-      command => "${cmd_rsnapshot} -c ${config_file} daily",
+      command => "${cron_daily_prepend}${cmd_rsnapshot} -c ${config_file} daily",
       user    => $server_user,
       hour    => $backup_time_hour,
       minute  => ($backup_time_minute + 50) % 60
@@ -142,7 +171,7 @@ define rsnapshot::server::config (
   ## weekly
   if($retain_weekly > 0) {
     cron { "rsnapshot-${name}-weekly" :
-      command => "${cmd_rsnapshot} -c ${config_file} weekly",
+      command => "${cron_weekly_prepend}${cmd_rsnapshot} -c ${config_file} weekly",
       user    => $server_user,
       hour    => ($backup_time_hour + 3) % 24,
       minute  => ($backup_time_minute + 50) % 60,
@@ -155,7 +184,7 @@ define rsnapshot::server::config (
 
   ## monthly
   cron { "rsnapshot-${name}-monthly" :
-    command  => "${cmd_rsnapshot} -c ${config_file} monthly",
+    command  => "${cron_monthy_prepend}${cmd_rsnapshot} -c ${config_file} monthly",
     user     => $server_user,
     hour     => ($backup_time_hour + 7) % 24,
     minute   => ($backup_time_minute + 50) % 60,

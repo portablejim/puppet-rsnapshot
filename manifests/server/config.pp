@@ -104,7 +104,7 @@ define rsnapshot::server::config (
     File[$log_file] -> Cron["rsnapshot-${name}-monthly"]
   }
 
-  if($sync_first) {
+  if($sync_first > 0) {
       $cron_prepend = "${cmd_rsnapshot} -c ${config_file} sync &&"
   }
   else {

@@ -55,6 +55,7 @@ define rsnapshot::server::config (
   $linux_lvm_cmd_lvremove = $rsnapshot::server::linux_lvm_cmd_lvremove,
   $linux_lvm_cmd_mount = $rsnapshot::server::linux_lvm_cmd_mount,
   $linux_lvm_cmd_umount = $rsnapshot::server::linux_lvm_cmd_umount,
+  $allow_warnings = false,
   ) {
 
   # Remove trailing slashes.
@@ -105,7 +106,12 @@ define rsnapshot::server::config (
   }
 
   if($sync_first > 0) {
-      $cron_prepend = "${cmd_rsnapshot} -c ${config_file} sync &&"
+      if($allow_warnings) {
+          $cron_prepend = "${cmd_rsnapshot} -c ${config_file} sync; test $? != 1 &&"
+      }
+      else {
+          $cron_prepend = "${cmd_rsnapshot} -c ${config_file} sync &&"
+      }
   }
   else {
       $cron_prepend = ""
